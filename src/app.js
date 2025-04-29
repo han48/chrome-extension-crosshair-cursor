@@ -1,3 +1,5 @@
+let isEnabled = false;
+
 // Tạo hai div đại diện cho đường kẻ dọc và ngang
 const verticalLine = document.createElement('div');
 verticalLine.id = 'mr4-vertical-line';
@@ -32,6 +34,21 @@ document.body.appendChild(horizontalLine);
 
 // Theo dõi vị trí chuột và di chuyển các đường kẻ
 document.addEventListener('mousemove', (event) => {
-  verticalLine.style.left = `${event.clientX}px`;
-  horizontalLine.style.top = `${event.clientY}px`;
+  if (isEnabled) {
+    verticalLine.style.left = `${event.clientX}px`;
+    horizontalLine.style.top = `${event.clientY}px`;
+    verticalLine.style.display = 'block';
+    horizontalLine.style.display = 'block';
+  }
+});
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.action === 'enable') {
+    isEnabled = true;
+  } else if (message.action === 'disable') {
+    isEnabled = false;
+    // Xóa các đường kẻ nếu tắt
+    verticalLine.style.display = 'none';
+    horizontalLine.style.display = 'none';
+  }
 });
