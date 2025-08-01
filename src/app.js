@@ -52,3 +52,29 @@ chrome.runtime.onMessage.addListener((message) => {
     horizontalLine.style.display = 'none';
   }
 });
+
+const switchImageView = () => {
+    const imgContainer = document.getElementsByClassName('lsf-image')
+    const imgs = imgContainer[0].getElementsByTagName('img')
+    const img = imgs[0]
+    if (img.getAttribute('original-src') === null) {
+        img.setAttribute('original-src', img.src)
+    }
+    if (img.getAttribute('original-show') === null) {
+        img.setAttribute('original-show', false)
+    }
+    if (img.getAttribute('original-show') === 'false') {
+        img.src = img.getAttribute('original-src').replace('-unsharps', '')
+        img.setAttribute('original-show', true)
+    } else {
+        img.src = img.getAttribute('original-src')
+        img.setAttribute('original-show', false)
+    }
+}
+
+document.addEventListener('keydown', function(event) {
+  if (isEnabled && event.key === 'F2') {
+    event.preventDefault();
+    switchImageView();
+  }
+});
