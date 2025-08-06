@@ -6,6 +6,16 @@ verticalLine.id = 'mr4-vertical-line';
 const horizontalLine = document.createElement('div');
 horizontalLine.id = 'mr4-horizontal-line';
 
+const styleElement = document.createElement('style');
+styleElement.type = 'text/css';
+const cssRules = `
+  .show-crosshair-cursor canvas {
+    cursor: none !important;
+  }
+`;
+styleElement.textContent = cssRules;
+document.head.appendChild(styleElement);
+
 // Định dạng cho đường kẻ dọc
 Object.assign(verticalLine.style, {
   position: 'fixed',
@@ -45,8 +55,10 @@ document.addEventListener('mousemove', (event) => {
 chrome.runtime.onMessage.addListener((message) => {
   if (message.action === 'enable') {
     isEnabled = true;
+    document.body.classList.add('show-crosshair-cursor')
   } else if (message.action === 'disable') {
     isEnabled = false;
+    document.body.classList.remove('show-crosshair-cursor')
     // Xóa các đường kẻ nếu tắt
     verticalLine.style.display = 'none';
     horizontalLine.style.display = 'none';
