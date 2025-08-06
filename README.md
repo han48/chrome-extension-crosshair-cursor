@@ -4,8 +4,8 @@ My Chrome Extension
 
 ## Features
 
-- Feature 1
-- Feature 2
+- Display crosshair in web content
+- Press F2 for switch image view
 
 ## Install
 
