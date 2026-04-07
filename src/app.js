@@ -66,27 +66,49 @@ chrome.runtime.onMessage.addListener((message) => {
 });
 
 const switchImageView = () => {
-    const imgContainer = document.getElementsByClassName('lsf-image')
-    const imgs = imgContainer[0].getElementsByTagName('img')
-    const img = imgs[0]
-    if (img.getAttribute('original-src') === null) {
-        img.setAttribute('original-src', img.src)
-    }
-    if (img.getAttribute('original-show') === null) {
-        img.setAttribute('original-show', false)
-    }
-    if (img.getAttribute('original-show') === 'false') {
-        img.src = img.getAttribute('original-src').replace('-unsharps', '')
-        img.setAttribute('original-show', true)
-    } else {
-        img.src = img.getAttribute('original-src')
-        img.setAttribute('original-show', false)
-    }
+  const imgContainer = document.getElementsByClassName('lsf-image')
+  const imgs = imgContainer[0].getElementsByTagName('img')
+  const img = imgs[0]
+  if (img.getAttribute('original-src') === null) {
+    img.setAttribute('original-src', img.src)
+  }
+  if (img.getAttribute('original-show') === null) {
+    img.setAttribute('original-show', false)
+  }
+  if (img.getAttribute('original-show') === 'false') {
+    img.src = img.getAttribute('original-src').replace('-unsharps', '')
+    img.setAttribute('original-show', true)
+  } else {
+    img.src = img.getAttribute('original-src')
+    img.setAttribute('original-show', false)
+  }
 }
 
-document.addEventListener('keydown', function(event) {
-  if (isEnabled && event.key === 'F2') {
-    event.preventDefault();
-    switchImageView();
+document.addEventListener('keydown', function (event) {
+  if (isEnabled) {
+    if (event.key === 'F2') {
+      event.preventDefault();
+      switchImageView();
+    }
   }
+  if (event.ctrlKey && event.key === 'ArrowRight') {
+    const url = new URL(window.location.href);
+    const taskId = parseInt(url.searchParams.get('task'), 10);
+
+    if (!isNaN(taskId)) {
+      const nextTaskId = taskId + 1;
+      url.searchParams.set('task', nextTaskId);
+      window.location.href = url.toString();
+    }
+  } else if (event.ctrlKey && event.key === 'ArrowLeft') {
+    const url = new URL(window.location.href);
+    const taskId = parseInt(url.searchParams.get('task'), 10);
+
+    if (!isNaN(taskId)) {
+      const nextTaskId = taskId - 1;
+      url.searchParams.set('task', nextTaskId);
+      window.location.href = url.toString();
+    }
+  }
+
 });
